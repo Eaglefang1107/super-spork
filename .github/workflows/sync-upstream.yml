@@ -2,8 +2,8 @@ name: Sync Upstream
 
 on:
   schedule:
-    - cron: '0 0 * * *'
-  workflow_dispatch:
+    - cron: '0 0 * * *' # Runs daily at midnight UTC
+  workflow_dispatch: # Allows manual trigger from the Actions tab on GitHub
 
 jobs:
   sync:
@@ -11,14 +11,14 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: write
+      contents: write # Needed to push changes back to origin
 
     steps:
       - name: Checkout target repo
         uses: actions/checkout@v4
         with:
           ref: main
-          fetch-depth: 0
+          fetch-depth: 0 # Fetch all history for merging
 
       - name: Configure Git
         run: |
@@ -26,8 +26,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Add upstream remote
-        run: |
-          git remote add upstream https://github.com/Eaglefang1107/super-spork.git || true
+        run: git remote add upstream https://github.com/Eaglefang1107/super-spork.git || true
 
       - name: Fetch upstream
         run: git fetch upstream main

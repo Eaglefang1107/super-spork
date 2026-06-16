@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "git:sync": "node scripts/git-sync.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
