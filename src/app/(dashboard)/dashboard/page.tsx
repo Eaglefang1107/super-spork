@@ -616,6 +616,56 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      {/* ── Owner's Staff Work & Leave Summary ── */}
+      {user?.role === "owner" && (
+        <div className="sos-card p-5 animate-fade-in">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-[14px] font-semibold text-[var(--foreground)]">Staff Work & Leave Summary</h2>
+              <p className="text-[12px] text-[var(--foreground-muted)]">Total accumulated work and leaves taken by employees</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {mockUsers
+              .filter((u) => u.id !== user?.id)
+              .map((u) => {
+                const totalWorkSeconds = shifts.filter(s => s.userId === u.id).reduce((acc, s) => acc + s.durationSeconds, 0);
+                const hrs = Math.floor(totalWorkSeconds / 3600);
+                const mins = Math.floor((totalWorkSeconds % 3600) / 60);
+                // Mock leaves since there's no leave system: generate from id hash or just 0
+                // We'll give 0 leaves unless they have an ID of 'user_2'
+                const mockLeaves = u.id === 'user_2' ? 2 : u.id === 'user_3' ? 1 : 0;
+                
+                return (
+                  <div key={u.id} className="p-4 rounded-xl border border-[var(--border)] bg-[var(--background-subtle)] flex flex-col gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full gradient-primary flex items-center justify-center text-[10px] font-bold text-white flex-shrink-0">
+                        {getInitials(u.displayName)}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-[12.5px] font-semibold text-[var(--foreground)] truncate">{u.displayName}</p>
+                        <p className="text-[11px] text-[var(--foreground-subtle)] capitalize truncate">
+                          {u.role.replace("_", " ")}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between mt-2 pt-3 border-t border-[var(--border)]">
+                      <div>
+                        <p className="text-[10px] text-[var(--foreground-muted)] uppercase tracking-wider font-semibold mb-0.5">Total Work</p>
+                        <p className="text-[13px] font-mono font-medium text-[var(--foreground)]">{hrs}h {mins}m</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-[10px] text-[var(--foreground-muted)] uppercase tracking-wider font-semibold mb-0.5">Leaves Taken</p>
+                        <p className="text-[13px] font-medium text-[var(--foreground)]">{mockLeaves} days</p>
+                      </div>
+                    </div>
+                  </div>
+                )
+            })}
+          </div>
+        </div>
+      )}
+
       {/* ── Live Team Shift Status ── */}
       <div className="sos-card p-5 animate-fade-in">
         <div className="flex items-center justify-between mb-4">
