@@ -86,8 +86,10 @@ export function AppSidebar() {
   const [newDealOpen, setNewDealOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener("resize", checkMobile);
@@ -99,7 +101,7 @@ export function AppSidebar() {
     return pathname.startsWith(href);
   };
 
-  const collapsed = !isMobile && sidebarCollapsed && !isHovered;
+  const collapsed = !mounted ? true : (!isMobile && sidebarCollapsed && !isHovered);
 
   // Close sidebar on mobile when navigating
   useEffect(() => {
